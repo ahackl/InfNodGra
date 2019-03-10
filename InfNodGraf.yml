@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+
+  influx:
+    image: influxdb
+    container_name: myinfluxdb
+    restart: always
+    ports:
+      - 8086:8086
+    volumes:
+      - if_db_data:/var/lib/influxdb
+
+  nodered:
+    image: nodered/node-red-docker:rpi
+    container_name: mynodered
+    restart: always
+    ports:
+      - 1880:1880
+    volumes:
+      - node-red-data:/data
+ 
+  grafana:
+    image: grafana/grafana
+    container_name: mygrafana
+    ports:
+      - 3000:3000
+    volumes:
+     - grafana-storage:/var/lib/grafana
+
+
+volumes:
+  if_db_data:
+  node-red-data:
+  grafana-storage:

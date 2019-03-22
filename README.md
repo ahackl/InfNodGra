@@ -46,6 +46,15 @@ exit
 exit
 ```
 
+Install Node-RED plugins via Manage palette
+```
+* node-red-contrib-influxdb
+* node-red-dashboard
+* node-red-node-openweathermap
+```
+
+
+
 
 
 [influxDB]: https://www.influxdata.com

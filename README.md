@@ -1,4 +1,4 @@
-# InfNodGraf
+# InfNodGra
 
 Install the [influxDB] database, the [Node-RED] flow-based programming language and analytic tool [Grafana]
 on a Raspberry Pi with [LoxBerry] 1.4 via a docker environment.

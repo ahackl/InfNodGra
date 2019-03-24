@@ -6,7 +6,7 @@
  <?php echo '<p>Docker-Plugin: InfluxDB /  Node-Red / Grafana</p>'; ?>
 	<br/>
 	<br/>
-	Experimente Installation der Docker Container zum testen und ausprobieren.
+	Experimentelle Installation der Docker Container zum testen und ausprobieren.
 
 	<br/>
 	<br/>

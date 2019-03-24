@@ -91,8 +91,8 @@ then
 		-e INFLUXDB_ADMIN_USER=dbadmin \
 		-e INFLUXDB_ADMIN_PASSWORD=dbadmin \
 		influxdb
-        # create a database
-	curl -i -XPOST "http://localhost:8086/query?u=dbadmin&p=dbadmin" --data-urlencode "q=CREATE DATABASE loxdb"
+    # create a database
+	# curl -i -XPOST "http://localhost:8086/query?u=dbadmin&p=dbadmin" --data-urlencode "q=CREATE DATABASE loxdb"
 fi
 
 
@@ -116,13 +116,13 @@ then
 		nodered/node-red-docker:rpi
 
 	# install modules
-	modules=(node-red-contrib-influxdb node-red-dashboard node-red-node-openweathermap)
-	for i in "${modules[@]}"
-	do
-		docker exec -ti nodered sh -c "cd /data && npm install $i && exit"
-	done
-	docker stop nodered
-	docker start nodered
+	#modules=(node-red-contrib-influxdb node-red-dashboard node-red-node-openweathermap)
+	#for i in "${modules[@]}"
+	#do
+	#	docker exec -ti nodered sh -c "cd /data && npm install $i && exit"
+	#done
+	#docker stop nodered
+	#docker start nodered
 fi
 
 # if grafana container does not exists

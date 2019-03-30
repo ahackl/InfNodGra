@@ -1,0 +1,53 @@
+[
+    {
+        "id": "2d548f67.eea1e",
+        "type": "tab",
+        "label": "Weather Forcast",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "4afaa274.f6f50c",
+        "type": "influxdb out",
+        "z": "2d548f67.eea1e",
+        "influxdb": "ab0863d1.e7caa8",
+        "name": "DB weather_forcast ",
+        "measurement": "weather_forcast ",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 310,
+        "y": 93,
+        "wires": []
+    },
+    {
+        "id": "8e28dbb3.64d5f8",
+        "type": "openweathermap in",
+        "z": "2d548f67.eea1e",
+        "name": "Vienna",
+        "wtype": "current",
+        "lon": "16.363449",
+        "lat": "48.210033",
+        "city": "",
+        "country": "",
+        "language": "de",
+        "x": 104,
+        "y": 93,
+        "wires": [
+            [
+                "4afaa274.f6f50c"
+            ]
+        ]
+    },
+    {
+        "id": "ab0863d1.e7caa8",
+        "type": "influxdb",
+        "z": "",
+        "hostname": "192.168.1.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "loxdb",
+        "name": "",
+        "usetls": false,
+        "tls": ""
+    }
+]

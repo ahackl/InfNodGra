@@ -8,6 +8,9 @@ No warranty
 
 Run postroot.sh on the Raspberry Pi as root
 
+For node-red-homekit 
+sudo apt-get install libavahi-compat-libdnssd-dev
+
 [influxDB]: https://www.influxdata.com
 [Node-RED]: https://nodered.org
 [Grafana]: https://grafana.com

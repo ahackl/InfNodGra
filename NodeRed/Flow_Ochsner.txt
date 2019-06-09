@@ -1,0 +1,176 @@
+[
+    {
+        "id": "e069e79b.8a5fa8",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "77477a27.8344cc",
+        "type": "inject",
+        "z": "e069e79b.8a5fa8",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "180",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 430,
+        "y": 100,
+        "wires": [
+            [
+                "2226dfef.248ea8"
+            ]
+        ]
+    },
+    {
+        "id": "756a4504.391584",
+        "type": "influxdb out",
+        "z": "e069e79b.8a5fa8",
+        "influxdb": "ab0863d1.e7caa8",
+        "name": "DB ochsner",
+        "measurement": "ochsner",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 430,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "2226dfef.248ea8",
+        "type": "function",
+        "z": "e069e79b.8a5fa8",
+        "name": "Parameter list",
+        "func": "var msgList = [];\n\nvar commandList = {\n    \"heat pipe status\":\"/1/2/1/125/0\",\n    \"TWV\":\"/1/2/1/125/1\",\n    \"1-2-1-125-2\":\"/1/2/1/125/2\",\n    \"TWR\":\"/1/2/1/125/3\",\n    \"TQA\":\"/1/2/1/125/4\",\n    \"TQE\":\"/1/2/1/125/5\",\n    \"cycle of operation\":\"/1/2/1/125/6\",\n    \"operating hours\":\"/1/2/1/125/7\",\n    \"volume usage\":\"/1/2/1/125/8\",\n    \"volume source\":\"/1/2/1/125/9\",\n    \"heat energy kWh\":\"1/2/1/125/10\",\n    \"heat energy MWh\":\"1/2/1/125/11\",\n    \"warm water energy kWh\":\"1/2/1/125/12\",\n    \"warm water energy MWh\":\"1/2/1/125/13\",\n    \"heat circuit status\":\"1/2/4/119/0\",\n    \"outdoor temperature\":\"1/2/4/119/1\",\n    \"mean outdoor temperature\":\"1/2/4/119/2\",\n    \"specified room temperature\":\"1/2/4/119/3\",\n    \"heat inlet temperature\":\"1/2/4/119/4\",\n    \"specified heat inlet temperature\":\"1/2/4/119/5\",\n    \"water status\":\"1/2/7/121/0\",\n    \"water temperature\":\"1/2/7/121/1\",\n    \"specified water temp\":\"1/2/7/121/2\",\n    \"dist middle temp\":\"1/2/8/122/1\",\n    \"dist inlet temp\":\"1/2/8/122/2\",\n    \"dist specified temp\":\"1/2/8/122/3\",\n    \"dist heat energy kWh\":\"1/2/8/122/4\",\n    \"dist heat energy MWh\":\"1/2/8/122/5\",\n    \"dist status\":\"1/2/8/122/6\"\n};\n\nvar count = Object.keys(commandList).length;\n\nfor (var i=0;i<count;i++) {\n    var firstKey = Object.keys(commandList)[i];\n    var firstValue = commandList[firstKey];\n    var outputMsg = {\n        \"commandName\": firstKey,\n        \"commandId\": firstValue\n    };\n    msgList.push({payload:outputMsg})\n}\nreturn [msgList];",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 440,
+        "y": 160,
+        "wires": [
+            [
+                "6b463f8d.e81f"
+            ]
+        ]
+    },
+    {
+        "id": "2e997b0d.71c074",
+        "type": "function",
+        "z": "e069e79b.8a5fa8",
+        "name": "SOAP Params",
+        "func": "msg.commandId = msg.payload.commandId;\nmsg.commandName = msg.payload.commandName;\n\nmsg.headers = {};\nmsg.headers={ \n    'Content-Type': 'text/xml'\n};\n\nmsg.payload ='<?xml version=\"1.0\" encoding=\"UTF-8\"?>'+'\\n'\nmsg.payload+='<SOAP-ENV:Envelope'+'\\n'\nmsg.payload+='xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"'+'\\n'\nmsg.payload+='xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\"'+'\\n'\nmsg.payload+='xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"'+'\\n'\nmsg.payload+='xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"'+'\\n'\nmsg.payload+='xmlns:ns=\"http://ws01.lom.ch/soap/\">'+'\\n'\nmsg.payload+='<SOAP-ENV:Body>'+'\\n'\nmsg.payload+='<ns:getDpRequest>'+'\\n'\nmsg.payload+='<ref>'+'\\n'\nmsg.payload+='<oid>'+msg.commandId+'</oid>'+'\\n'\nmsg.payload+='<prop/>'+'\\n'\nmsg.payload+='</ref>'+'\\n'\nmsg.payload+='<startIndex>0</startIndex>'+'\\n'\nmsg.payload+='<count>-1</count>'+'\\n'\nmsg.payload+='</ns:getDpRequest>'+'\\n'\nmsg.payload+='</SOAP-ENV:Body>'+'\\n';\nmsg.payload+='</SOAP-ENV:Envelope>'+'\\n';\n\n\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 440,
+        "y": 280,
+        "wires": [
+            [
+                "41ac7191.0e513"
+            ]
+        ]
+    },
+    {
+        "id": "41ac7191.0e513",
+        "type": "http request",
+        "z": "e069e79b.8a5fa8",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": false,
+        "url": "http://192.168.3.100/ws",
+        "tls": "",
+        "proxy": "",
+        "authType": "basic",
+        "x": 450,
+        "y": 340,
+        "wires": [
+            [
+                "eb80e7d5.6f4af8"
+            ]
+        ]
+    },
+    {
+        "id": "eb80e7d5.6f4af8",
+        "type": "xml",
+        "z": "e069e79b.8a5fa8",
+        "name": "",
+        "property": "payload",
+        "attr": "",
+        "chr": "",
+        "x": 410,
+        "y": 400,
+        "wires": [
+            [
+                "779eb468.4da9bc"
+            ]
+        ]
+    },
+    {
+        "id": "779eb468.4da9bc",
+        "type": "function",
+        "z": "e069e79b.8a5fa8",
+        "name": "Extract value",
+        "func": "var payload=msg.payload;\nvar commandName=msg.commandName;\n\nvar NewMsg={};\nNewMsg.payload = {\n    [commandName]: Number(payload[\"SOAP-ENV:Envelope\"][\"SOAP-ENV:Body\"][0][\"ns:getDpResponse\"][0].dpCfg[0].value[0])\n};\nreturn NewMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 430,
+        "y": 460,
+        "wires": [
+            [
+                "756a4504.391584",
+                "d4ac9b27.6cbf28"
+            ]
+        ]
+    },
+    {
+        "id": "d4ac9b27.6cbf28",
+        "type": "debug",
+        "z": "e069e79b.8a5fa8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 630,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "6b463f8d.e81f",
+        "type": "delay",
+        "z": "e069e79b.8a5fa8",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "3",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 440,
+        "y": 220,
+        "wires": [
+            [
+                "2e997b0d.71c074"
+            ]
+        ]
+    },
+    {
+        "id": "ab0863d1.e7caa8",
+        "type": "influxdb",
+        "z": "",
+        "hostname": "192.168.3.118",
+        "port": "8086",
+        "protocol": "http",
+        "database": "loxdb",
+        "name": "",
+        "usetls": false,
+        "tls": ""
+    }
+]
